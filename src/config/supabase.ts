@@ -1,5 +1,17 @@
 import { createClient } from '@supabase/supabase-js';
 
+// Type declaration for Vite environment variables
+interface ImportMetaEnv {
+  VITE_SUPABASE_URL: string;
+  VITE_SUPABASE_ANON_KEY: string;
+  VITE_SUPABASE_SERVICE_ROLE_KEY?: string;
+}
+
+// Augment the ImportMeta interface
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
+
 // Environment variables (would be in .env file in production)
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://your-supabase-project.supabase.co';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'your-anon-key';

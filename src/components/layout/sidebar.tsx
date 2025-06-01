@@ -24,7 +24,7 @@ import {
   Wrench,
   FileWarning,
   FileSearch,
-  Handshake,
+  Users2,
   Users,
   Settings,
   ShoppingCart,
@@ -34,7 +34,6 @@ import {
   X
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 type NavItemProps = {
   href: string;
@@ -82,16 +81,7 @@ const NavItem = ({
       } : {}}
     >
       {collapsed ? (
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <span className="h-5 w-5">{icon}</span>
-            </TooltipTrigger>
-            <TooltipContent side="right" align="start" className="z-50">
-              {label}
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <span className="h-5 w-5" title={label}>{icon}</span>
       ) : (
         <>
           <span className="h-5 w-5">{icon}</span>
@@ -116,30 +106,22 @@ const NavGroup = ({
   return (
     <div className="space-y-1">
       {collapsed ? (
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                onClick={() => !collapsed && setIsOpen(!isOpen)}
-                className={cn(
-                  "flex w-full items-center justify-center rounded-md p-2 text-sm transition-colors",
-                  active 
-                    ? "bg-primary/10 text-primary font-medium" 
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                )}
-                style={active ? { 
-                  backgroundColor: `hsl(${moduleColor}/10%)`,
-                  color: `hsl(${moduleColor})` 
-                } : {}}
-              >
-                <span className="h-5 w-5">{icon}</span>
-              </button>
-            </TooltipTrigger>
-            <TooltipContent side="right" align="start" className="z-50">
-              {label}
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <button
+          onClick={() => !collapsed && setIsOpen(!isOpen)}
+          className={cn(
+            "flex w-full items-center justify-center rounded-md p-2 text-sm transition-colors",
+            active 
+              ? "bg-primary/10 text-primary font-medium" 
+              : "text-muted-foreground hover:bg-muted hover:text-foreground"
+          )}
+          style={active ? { 
+            backgroundColor: `hsl(${moduleColor}/10%)`,
+            color: `hsl(${moduleColor})` 
+          } : {}}
+          title={label}
+        >
+          <span className="h-5 w-5">{icon}</span>
+        </button>
       ) : (
         <button
           onClick={() => !collapsed && setIsOpen(!isOpen)}
@@ -237,18 +219,9 @@ export function Sidebar({ collapsed = false, onToggle, className }: SidebarProps
         collapsed ? "flex justify-center" : ""
       )}>
         {collapsed ? (
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button size="icon" className="w-10 h-10 rounded-full">
-                  <PlusCircle className="h-5 w-5" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="right">
-                Quick Add
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <Button size="icon" className="w-10 h-10 rounded-full" title="Quick Add">
+            <PlusCircle className="h-5 w-5" />
+          </Button>
         ) : (
           <Button className="w-full gap-2">
             <PlusCircle className="h-4 w-4" />
@@ -470,7 +443,7 @@ export function Sidebar({ collapsed = false, onToggle, className }: SidebarProps
             />
             <NavItem
               href="/resources/factors"
-              icon={<Handshake />}
+              icon={<Users2 />}
               label="Factors"
               active={isActive("/resources/factors")}
               collapsed={collapsed}

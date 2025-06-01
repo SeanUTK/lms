@@ -53,6 +53,18 @@ import {
   Legend
 } from "recharts";
 
+// Type declaration for Vite environment variables
+interface ImportMetaEnv {
+  VITE_MAPBOX_ACCESS_TOKEN: string;
+  VITE_MAPBOX_STYLE?: string;
+  [key: string]: string | undefined;
+}
+
+// Augment the ImportMeta interface
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
+
 // Mock data for the dashboard
 const mockRevenueData = [
   { month: "Jan", revenue: 125000, expenses: 95000, profit: 30000 },
@@ -210,6 +222,7 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     // Get Mapbox token from environment variables
     const mapboxToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || '';
+    const mapboxStyle = import.meta.env.VITE_MAPBOX_STYLE || 'mapbox://styles/mapbox/light-v11';
     
     // Check if token exists and mapContainer is available
     if (!mapboxToken) {
@@ -228,7 +241,7 @@ const Dashboard: React.FC = () => {
       if (!map.current) {
         map.current = new mapboxgl.Map({
           container: mapContainer.current,
-          style: 'mapbox://styles/mapbox/light-v11',
+          style: mapboxStyle,
           center: [-98.5795, 39.8283], // Center of the US
           zoom: 3,
           interactive: true,
@@ -257,56 +270,56 @@ const Dashboard: React.FC = () => {
                   'fill-color': [
                     'match',
                     ['get', 'STATE_ABBR'],
-                    'CA', getColorForValue(mockStateLoads['CA']),
-                    'TX', getColorForValue(mockStateLoads['TX']),
-                    'NY', getColorForValue(mockStateLoads['NY']),
-                    'FL', getColorForValue(mockStateLoads['FL']),
-                    'IL', getColorForValue(mockStateLoads['IL']),
-                    'PA', getColorForValue(mockStateLoads['PA']),
-                    'OH', getColorForValue(mockStateLoads['OH']),
-                    'GA', getColorForValue(mockStateLoads['GA']),
-                    'NC', getColorForValue(mockStateLoads['NC']),
-                    'MI', getColorForValue(mockStateLoads['MI']),
-                    'NJ', getColorForValue(mockStateLoads['NJ']),
-                    'VA', getColorForValue(mockStateLoads['VA']),
-                    'WA', getColorForValue(mockStateLoads['WA']),
-                    'AZ', getColorForValue(mockStateLoads['AZ']),
-                    'MA', getColorForValue(mockStateLoads['MA']),
-                    'TN', getColorForValue(mockStateLoads['TN']),
-                    'IN', getColorForValue(mockStateLoads['IN']),
-                    'MO', getColorForValue(mockStateLoads['MO']),
-                    'MD', getColorForValue(mockStateLoads['MD']),
-                    'CO', getColorForValue(mockStateLoads['CO']),
-                    'WI', getColorForValue(mockStateLoads['WI']),
-                    'MN', getColorForValue(mockStateLoads['MN']),
-                    'SC', getColorForValue(mockStateLoads['SC']),
-                    'AL', getColorForValue(mockStateLoads['AL']),
-                    'LA', getColorForValue(mockStateLoads['LA']),
-                    'KY', getColorForValue(mockStateLoads['KY']),
-                    'OR', getColorForValue(mockStateLoads['OR']),
-                    'OK', getColorForValue(mockStateLoads['OK']),
-                    'CT', getColorForValue(mockStateLoads['CT']),
-                    'IA', getColorForValue(mockStateLoads['IA']),
-                    'MS', getColorForValue(mockStateLoads['MS']),
-                    'AR', getColorForValue(mockStateLoads['AR']),
-                    'KS', getColorForValue(mockStateLoads['KS']),
-                    'UT', getColorForValue(mockStateLoads['UT']),
-                    'NV', getColorForValue(mockStateLoads['NV']),
-                    'NM', getColorForValue(mockStateLoads['NM']),
-                    'WV', getColorForValue(mockStateLoads['WV']),
-                    'NE', getColorForValue(mockStateLoads['NE']),
-                    'ID', getColorForValue(mockStateLoads['ID']),
-                    'HI', getColorForValue(mockStateLoads['HI']),
-                    'ME', getColorForValue(mockStateLoads['ME']),
-                    'NH', getColorForValue(mockStateLoads['NH']),
-                    'RI', getColorForValue(mockStateLoads['RI']),
-                    'MT', getColorForValue(mockStateLoads['MT']),
-                    'DE', getColorForValue(mockStateLoads['DE']),
-                    'SD', getColorForValue(mockStateLoads['SD']),
-                    'ND', getColorForValue(mockStateLoads['ND']),
-                    'AK', getColorForValue(mockStateLoads['AK']),
-                    'VT', getColorForValue(mockStateLoads['VT']),
-                    'WY', getColorForValue(mockStateLoads['WY']),
+                    'CA', getColorForValue(mockStateLoads['CA'] || 0),
+                    'TX', getColorForValue(mockStateLoads['TX'] || 0),
+                    'NY', getColorForValue(mockStateLoads['NY'] || 0),
+                    'FL', getColorForValue(mockStateLoads['FL'] || 0),
+                    'IL', getColorForValue(mockStateLoads['IL'] || 0),
+                    'PA', getColorForValue(mockStateLoads['PA'] || 0),
+                    'OH', getColorForValue(mockStateLoads['OH'] || 0),
+                    'GA', getColorForValue(mockStateLoads['GA'] || 0),
+                    'NC', getColorForValue(mockStateLoads['NC'] || 0),
+                    'MI', getColorForValue(mockStateLoads['MI'] || 0),
+                    'NJ', getColorForValue(mockStateLoads['NJ'] || 0),
+                    'VA', getColorForValue(mockStateLoads['VA'] || 0),
+                    'WA', getColorForValue(mockStateLoads['WA'] || 0),
+                    'AZ', getColorForValue(mockStateLoads['AZ'] || 0),
+                    'MA', getColorForValue(mockStateLoads['MA'] || 0),
+                    'TN', getColorForValue(mockStateLoads['TN'] || 0),
+                    'IN', getColorForValue(mockStateLoads['IN'] || 0),
+                    'MO', getColorForValue(mockStateLoads['MO'] || 0),
+                    'MD', getColorForValue(mockStateLoads['MD'] || 0),
+                    'CO', getColorForValue(mockStateLoads['CO'] || 0),
+                    'WI', getColorForValue(mockStateLoads['WI'] || 0),
+                    'MN', getColorForValue(mockStateLoads['MN'] || 0),
+                    'SC', getColorForValue(mockStateLoads['SC'] || 0),
+                    'AL', getColorForValue(mockStateLoads['AL'] || 0),
+                    'LA', getColorForValue(mockStateLoads['LA'] || 0),
+                    'KY', getColorForValue(mockStateLoads['KY'] || 0),
+                    'OR', getColorForValue(mockStateLoads['OR'] || 0),
+                    'OK', getColorForValue(mockStateLoads['OK'] || 0),
+                    'CT', getColorForValue(mockStateLoads['CT'] || 0),
+                    'IA', getColorForValue(mockStateLoads['IA'] || 0),
+                    'MS', getColorForValue(mockStateLoads['MS'] || 0),
+                    'AR', getColorForValue(mockStateLoads['AR'] || 0),
+                    'KS', getColorForValue(mockStateLoads['KS'] || 0),
+                    'UT', getColorForValue(mockStateLoads['UT'] || 0),
+                    'NV', getColorForValue(mockStateLoads['NV'] || 0),
+                    'NM', getColorForValue(mockStateLoads['NM'] || 0),
+                    'WV', getColorForValue(mockStateLoads['WV'] || 0),
+                    'NE', getColorForValue(mockStateLoads['NE'] || 0),
+                    'ID', getColorForValue(mockStateLoads['ID'] || 0),
+                    'HI', getColorForValue(mockStateLoads['HI'] || 0),
+                    'ME', getColorForValue(mockStateLoads['ME'] || 0),
+                    'NH', getColorForValue(mockStateLoads['NH'] || 0),
+                    'RI', getColorForValue(mockStateLoads['RI'] || 0),
+                    'MT', getColorForValue(mockStateLoads['MT'] || 0),
+                    'DE', getColorForValue(mockStateLoads['DE'] || 0),
+                    'SD', getColorForValue(mockStateLoads['SD'] || 0),
+                    'ND', getColorForValue(mockStateLoads['ND'] || 0),
+                    'AK', getColorForValue(mockStateLoads['AK'] || 0),
+                    'VT', getColorForValue(mockStateLoads['VT'] || 0),
+                    'WY', getColorForValue(mockStateLoads['WY'] || 0),
                     '#ccfbf1' // default color
                   ],
                   'fill-opacity': 0.8
@@ -341,11 +354,13 @@ const Dashboard: React.FC = () => {
               // Add click event for state details
               map.current.on('click', 'states-fill', (e) => {
                 if (e.features && e.features[0] && e.features[0].properties) {
-                  const stateName = e.features[0].properties.STATE_NAME;
-                  const stateAbbr = e.features[0].properties.STATE_ABBR;
-                  const loadCount = mockStateLoads[stateAbbr as keyof typeof mockStateLoads] || 0;
+                  const properties = e.features[0].properties;
+                  const stateName = properties.STATE_NAME;
+                  const stateAbbr = properties.STATE_ABBR;
                   
-                  if (map.current) {
+                  if (stateName && stateAbbr && map.current) {
+                    const loadCount = mockStateLoads[stateAbbr as string] || 0;
+                    
                     new mapboxgl.Popup()
                       .setLngLat(e.lngLat)
                       .setHTML(`

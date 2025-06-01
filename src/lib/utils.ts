@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { format, parseISO, formatDistance, differenceInDays } from "date-fns";
+import { format, parseISO, formatDistance as dateFormatDistance, differenceInDays } from "date-fns";
 
 /**
  * Tailwind CSS class merging utility
@@ -33,7 +33,7 @@ export const formatTime = (date: string | Date) => {
 export const formatTimeAgo = (date: string | Date) => {
   if (!date) return "N/A";
   const dateObj = typeof date === "string" ? parseISO(date) : date;
-  return formatDistance(dateObj, new Date(), { addSuffix: true });
+  return dateFormatDistance(dateObj, new Date(), { addSuffix: true });
 };
 
 export const isDateExpiring = (date: string | Date, daysThreshold: number = 30) => {
@@ -226,7 +226,7 @@ export const formatCoordinates = (lat: number, lng: number) => {
   return `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
 };
 
-export const calculateDistance = (
+export const calculateDistanceValue = (
   lat1: number,
   lon1: number,
   lat2: number,

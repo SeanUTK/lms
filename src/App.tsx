@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import React from "react";
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { AppLayout } from "@/components/layout/app-layout";
 import "@/styles/globals.css";
@@ -121,89 +121,87 @@ const LoadingFallback = () => (
 function App() {
   return (
     <BrowserRouter>
-      <Suspense fallback={<LoadingFallback />}>
-        <Routes>
-          {/* Auth routes */}
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Routes>
+        {/* Auth routes */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
-          {/* Main app routes */}
-          <Route path="/" element={<AppLayout />}>
-            {/* Dashboard */}
-            <Route index element={<Dashboard />} />
-            
-            {/* Reports */}
-            <Route path="reports" element={<ReportsPage />} />
-            <Route path="reports/:reportType" element={<ReportsPage />} />
-            
-            {/* Notifications */}
-            <Route path="notifications" element={<NotificationsPage />} />
-            
-            {/* Dispatching Module */}
-            <Route path="dispatch" element={<DispatchModule />}>
-              <Route index element={<Navigate to="/dispatch/board" replace />} />
-              <Route path="board" element={<DispatchBoardPage />} />
-              <Route path="tenders" element={<EDITendersPage />} />
-              <Route path="trips" element={<TripsPage />} />
-              <Route path="trips/:tripId" element={<TripDetailsPage />} />
-            </Route>
-            
-            {/* Accounting Module */}
-            <Route path="accounting" element={<AccountingModule />}>
-              <Route index element={<Navigate to="/accounting/receivables" replace />} />
-              <Route path="receivables" element={<ReceivablesPage />} />
-              <Route path="receivables/:invoiceId" element={<PlaceholderPage title="Invoice Details" />} />
-              <Route path="freight-bills" element={<FreightBillsPage />} />
-              <Route path="prepayments" element={<PrepaymentsPage />} />
-              <Route path="fuel-tolls" element={<FuelTollsPage />} />
-              <Route path="payroll" element={<PayrollPage />} />
-              <Route path="transactions" element={<TransactionsPage />} />
-            </Route>
-            
-            {/* Fleet Module */}
-            <Route path="fleet" element={<FleetModule />}>
-              <Route index element={<Navigate to="/fleet/overview" replace />} />
-              <Route path="compliance" element={<FleetCompliancePage />} />
-              <Route path="overview" element={<FleetOverviewPage />} />
-              <Route path="maintenance" element={<MaintenanceRepairsPage />} />
-              <Route path="equipment/:equipmentId" element={<PlaceholderPage title="Equipment Details" />} />
-            </Route>
-            
-            {/* Safety Module */}
-            <Route path="safety" element={<SafetyModule />}>
-              <Route index element={<Navigate to="/safety/compliance" replace />} />
-              <Route path="compliance" element={<SafetyCompliancePage />} />
-              <Route path="inspections" element={<DOTInspectionsPage />} />
-              <Route path="claims" element={<CollisionsClaimsPage />} />
-            </Route>
-            
-            {/* Account Resources Module */}
-            <Route path="resources" element={<ResourcesModule />}>
-              <Route index element={<Navigate to="/resources/companies" replace />} />
-              <Route path="companies" element={<CompaniesPage />} />
-              <Route path="factors" element={<FactorsPage />} />
-              <Route path="drivers" element={<DriversContractorsPage />} />
-              <Route path="drivers/:driverId" element={<PlaceholderPage title="Driver Details" />} />
-              <Route path="users" element={<SiteUsersPage />} />
-              <Route path="equipment" element={<EquipmentPage />} />
-              <Route path="customers" element={<CustomersPage />} />
-              <Route path="vendors" element={<VendorsPage />} />
-              <Route path="integrations" element={<IntegrationsPage />} />
-              <Route path="inventory" element={<InventoryPage />} />
-              <Route path="addresses" element={<AddressBookPage />} />
-            </Route>
-            
-            {/* Settings and Profile */}
-            <Route path="settings" element={<SettingsPage />} />
-            <Route path="profile" element={<ProfilePage />} />
-            <Route path="help" element={<HelpSupportPage />} />
+        {/* Main app routes */}
+        <Route path="/" element={<AppLayout />}>
+          {/* Dashboard */}
+          <Route index element={<Dashboard />} />
+          
+          {/* Reports */}
+          <Route path="reports" element={<ReportsPage />} />
+          <Route path="reports/:reportType" element={<ReportsPage />} />
+          
+          {/* Notifications */}
+          <Route path="notifications" element={<NotificationsPage />} />
+          
+          {/* Dispatching Module */}
+          <Route path="dispatch" element={<DispatchModule />}>
+            <Route index element={<Navigate to="/dispatch/board" replace />} />
+            <Route path="board" element={<DispatchBoardPage />} />
+            <Route path="tenders" element={<EDITendersPage />} />
+            <Route path="trips" element={<TripsPage />} />
+            <Route path="trips/:tripId" element={<TripDetailsPage />} />
           </Route>
           
-          {/* 404 - Not Found */}
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </Suspense>
+          {/* Accounting Module */}
+          <Route path="accounting" element={<AccountingModule />}>
+            <Route index element={<Navigate to="/accounting/receivables" replace />} />
+            <Route path="receivables" element={<ReceivablesPage />} />
+            <Route path="receivables/:invoiceId" element={<PlaceholderPage title="Invoice Details" />} />
+            <Route path="freight-bills" element={<FreightBillsPage />} />
+            <Route path="prepayments" element={<PrepaymentsPage />} />
+            <Route path="fuel-tolls" element={<FuelTollsPage />} />
+            <Route path="payroll" element={<PayrollPage />} />
+            <Route path="transactions" element={<TransactionsPage />} />
+          </Route>
+          
+          {/* Fleet Module */}
+          <Route path="fleet" element={<FleetModule />}>
+            <Route index element={<Navigate to="/fleet/overview" replace />} />
+            <Route path="compliance" element={<FleetCompliancePage />} />
+            <Route path="overview" element={<FleetOverviewPage />} />
+            <Route path="maintenance" element={<MaintenanceRepairsPage />} />
+            <Route path="equipment/:equipmentId" element={<PlaceholderPage title="Equipment Details" />} />
+          </Route>
+          
+          {/* Safety Module */}
+          <Route path="safety" element={<SafetyModule />}>
+            <Route index element={<Navigate to="/safety/compliance" replace />} />
+            <Route path="compliance" element={<SafetyCompliancePage />} />
+            <Route path="inspections" element={<DOTInspectionsPage />} />
+            <Route path="claims" element={<CollisionsClaimsPage />} />
+          </Route>
+          
+          {/* Account Resources Module */}
+          <Route path="resources" element={<ResourcesModule />}>
+            <Route index element={<Navigate to="/resources/companies" replace />} />
+            <Route path="companies" element={<CompaniesPage />} />
+            <Route path="factors" element={<FactorsPage />} />
+            <Route path="drivers" element={<DriversContractorsPage />} />
+            <Route path="drivers/:driverId" element={<PlaceholderPage title="Driver Details" />} />
+            <Route path="users" element={<SiteUsersPage />} />
+            <Route path="equipment" element={<EquipmentPage />} />
+            <Route path="customers" element={<CustomersPage />} />
+            <Route path="vendors" element={<VendorsPage />} />
+            <Route path="integrations" element={<IntegrationsPage />} />
+            <Route path="inventory" element={<InventoryPage />} />
+            <Route path="addresses" element={<AddressBookPage />} />
+          </Route>
+          
+          {/* Settings and Profile */}
+          <Route path="settings" element={<SettingsPage />} />
+          <Route path="profile" element={<ProfilePage />} />
+          <Route path="help" element={<HelpSupportPage />} />
+        </Route>
+        
+        {/* 404 - Not Found */}
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
     </BrowserRouter>
   );
 }
