@@ -20,7 +20,8 @@ import {
   CreditCard,
   Wallet,
   FileCheck,
-  Building2
+  Building2,
+  AlertTriangle
 } from "lucide-react";
 import { 
   Card, 
@@ -178,7 +179,7 @@ const mockEquipment = [
 ];
 
 // US States with mock load data
-const mockStateLoads = {
+const mockStateLoads: Record<string, number> = {
   "AL": 12, "AK": 3, "AZ": 18, "AR": 7, "CA": 45, "CO": 15, "CT": 8, "DE": 2,
   "FL": 35, "GA": 25, "HI": 1, "ID": 5, "IL": 28, "IN": 17, "IA": 9, "KS": 8,
   "KY": 11, "LA": 14, "ME": 4, "MD": 13, "MA": 16, "MI": 22, "MN": 12, "MS": 6,
@@ -204,143 +205,175 @@ const Dashboard: React.FC = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
+  const [mapError, setMapError] = useState<string | null>(null);
   
   useEffect(() => {
-    // Initialize Mapbox (normally you would use your own API key)
-    mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || 
-      "pk.eyJ1IjoiZXhhbXBsZXVzZXIiLCJhIjoiY2xhbmRvbWFjY2Vzc3Rva2VuIn0.ZXhhbXBsZXVzZXJrZXk";
+    // Get Mapbox token from environment variables
+    const mapboxToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || '';
     
-    if (mapContainer.current && !map.current) {
-      map.current = new mapboxgl.Map({
-        container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/light-v11',
-        center: [-98.5795, 39.8283], // Center of the US
-        zoom: 3,
-        interactive: true,
-      });
-      
-      map.current.on('load', () => {
-        setMapLoaded(true);
-        
-        // Add US states layer
-        if (map.current) {
-          // Add source for US states
-          map.current.addSource('states', {
-            type: 'geojson',
-            data: 'https://docs.mapbox.com/mapbox-gl-js/assets/us_states.geojson'
-          });
-          
-          // Add fill layer
-          map.current.addLayer({
-            id: 'states-fill',
-            type: 'fill',
-            source: 'states',
-            layout: {},
-            paint: {
-              'fill-color': [
-                'match',
-                ['get', 'STATE_ABBR'],
-                'CA', getColorForValue(mockStateLoads['CA']),
-                'TX', getColorForValue(mockStateLoads['TX']),
-                'NY', getColorForValue(mockStateLoads['NY']),
-                'FL', getColorForValue(mockStateLoads['FL']),
-                'IL', getColorForValue(mockStateLoads['IL']),
-                'PA', getColorForValue(mockStateLoads['PA']),
-                'OH', getColorForValue(mockStateLoads['OH']),
-                'GA', getColorForValue(mockStateLoads['GA']),
-                'NC', getColorForValue(mockStateLoads['NC']),
-                'MI', getColorForValue(mockStateLoads['MI']),
-                'NJ', getColorForValue(mockStateLoads['NJ']),
-                'VA', getColorForValue(mockStateLoads['VA']),
-                'WA', getColorForValue(mockStateLoads['WA']),
-                'AZ', getColorForValue(mockStateLoads['AZ']),
-                'MA', getColorForValue(mockStateLoads['MA']),
-                'TN', getColorForValue(mockStateLoads['TN']),
-                'IN', getColorForValue(mockStateLoads['IN']),
-                'MO', getColorForValue(mockStateLoads['MO']),
-                'MD', getColorForValue(mockStateLoads['MD']),
-                'CO', getColorForValue(mockStateLoads['CO']),
-                'WI', getColorForValue(mockStateLoads['WI']),
-                'MN', getColorForValue(mockStateLoads['MN']),
-                'SC', getColorForValue(mockStateLoads['SC']),
-                'AL', getColorForValue(mockStateLoads['AL']),
-                'LA', getColorForValue(mockStateLoads['LA']),
-                'KY', getColorForValue(mockStateLoads['KY']),
-                'OR', getColorForValue(mockStateLoads['OR']),
-                'OK', getColorForValue(mockStateLoads['OK']),
-                'CT', getColorForValue(mockStateLoads['CT']),
-                'IA', getColorForValue(mockStateLoads['IA']),
-                'MS', getColorForValue(mockStateLoads['MS']),
-                'AR', getColorForValue(mockStateLoads['AR']),
-                'KS', getColorForValue(mockStateLoads['KS']),
-                'UT', getColorForValue(mockStateLoads['UT']),
-                'NV', getColorForValue(mockStateLoads['NV']),
-                'NM', getColorForValue(mockStateLoads['NM']),
-                'WV', getColorForValue(mockStateLoads['WV']),
-                'NE', getColorForValue(mockStateLoads['NE']),
-                'ID', getColorForValue(mockStateLoads['ID']),
-                'HI', getColorForValue(mockStateLoads['HI']),
-                'ME', getColorForValue(mockStateLoads['ME']),
-                'NH', getColorForValue(mockStateLoads['NH']),
-                'RI', getColorForValue(mockStateLoads['RI']),
-                'MT', getColorForValue(mockStateLoads['MT']),
-                'DE', getColorForValue(mockStateLoads['DE']),
-                'SD', getColorForValue(mockStateLoads['SD']),
-                'ND', getColorForValue(mockStateLoads['ND']),
-                'AK', getColorForValue(mockStateLoads['AK']),
-                'VT', getColorForValue(mockStateLoads['VT']),
-                'WY', getColorForValue(mockStateLoads['WY']),
-                '#ccfbf1' // default color
-              ],
-              'fill-opacity': 0.8
-            }
-          });
-          
-          // Add outline layer
-          map.current.addLayer({
-            id: 'states-outline',
-            type: 'line',
-            source: 'states',
-            layout: {},
-            paint: {
-              'line-color': '#ffffff',
-              'line-width': 1
-            }
-          });
-          
-          // Add hover effect
-          map.current.on('mouseenter', 'states-fill', () => {
-            if (map.current) {
-              map.current.getCanvas().style.cursor = 'pointer';
-            }
-          });
-          
-          map.current.on('mouseleave', 'states-fill', () => {
-            if (map.current) {
-              map.current.getCanvas().style.cursor = '';
-            }
-          });
-          
-          // Add click event for state details
-          map.current.on('click', 'states-fill', (e) => {
-            if (e.features && e.features[0].properties) {
-              const stateName = e.features[0].properties.STATE_NAME;
-              const stateAbbr = e.features[0].properties.STATE_ABBR;
-              const loadCount = mockStateLoads[stateAbbr as keyof typeof mockStateLoads] || 0;
-              
-              new mapboxgl.Popup()
-                .setLngLat(e.lngLat)
-                .setHTML(`
-                  <strong>${stateName}</strong><br/>
-                  <span>Booked Loads: ${loadCount}</span>
-                `)
-                .addTo(map.current!);
-            }
-          });
-        }
-      });
+    // Check if token exists and mapContainer is available
+    if (!mapboxToken) {
+      setMapError("Mapbox token is missing. Please add VITE_MAPBOX_ACCESS_TOKEN to your environment variables.");
+      return;
     }
     
+    if (!mapContainer.current) {
+      return;
+    }
+    
+    try {
+      // Initialize Mapbox
+      mapboxgl.accessToken = mapboxToken;
+      
+      if (!map.current) {
+        map.current = new mapboxgl.Map({
+          container: mapContainer.current,
+          style: 'mapbox://styles/mapbox/light-v11',
+          center: [-98.5795, 39.8283], // Center of the US
+          zoom: 3,
+          interactive: true,
+        });
+        
+        // Add event listeners with proper error handling
+        map.current.on('load', () => {
+          setMapLoaded(true);
+          
+          try {
+            // Add US states layer
+            if (map.current) {
+              // Add source for US states
+              map.current.addSource('states', {
+                type: 'geojson',
+                data: 'https://docs.mapbox.com/mapbox-gl-js/assets/us_states.geojson'
+              });
+              
+              // Add fill layer
+              map.current.addLayer({
+                id: 'states-fill',
+                type: 'fill',
+                source: 'states',
+                layout: {},
+                paint: {
+                  'fill-color': [
+                    'match',
+                    ['get', 'STATE_ABBR'],
+                    'CA', getColorForValue(mockStateLoads['CA']),
+                    'TX', getColorForValue(mockStateLoads['TX']),
+                    'NY', getColorForValue(mockStateLoads['NY']),
+                    'FL', getColorForValue(mockStateLoads['FL']),
+                    'IL', getColorForValue(mockStateLoads['IL']),
+                    'PA', getColorForValue(mockStateLoads['PA']),
+                    'OH', getColorForValue(mockStateLoads['OH']),
+                    'GA', getColorForValue(mockStateLoads['GA']),
+                    'NC', getColorForValue(mockStateLoads['NC']),
+                    'MI', getColorForValue(mockStateLoads['MI']),
+                    'NJ', getColorForValue(mockStateLoads['NJ']),
+                    'VA', getColorForValue(mockStateLoads['VA']),
+                    'WA', getColorForValue(mockStateLoads['WA']),
+                    'AZ', getColorForValue(mockStateLoads['AZ']),
+                    'MA', getColorForValue(mockStateLoads['MA']),
+                    'TN', getColorForValue(mockStateLoads['TN']),
+                    'IN', getColorForValue(mockStateLoads['IN']),
+                    'MO', getColorForValue(mockStateLoads['MO']),
+                    'MD', getColorForValue(mockStateLoads['MD']),
+                    'CO', getColorForValue(mockStateLoads['CO']),
+                    'WI', getColorForValue(mockStateLoads['WI']),
+                    'MN', getColorForValue(mockStateLoads['MN']),
+                    'SC', getColorForValue(mockStateLoads['SC']),
+                    'AL', getColorForValue(mockStateLoads['AL']),
+                    'LA', getColorForValue(mockStateLoads['LA']),
+                    'KY', getColorForValue(mockStateLoads['KY']),
+                    'OR', getColorForValue(mockStateLoads['OR']),
+                    'OK', getColorForValue(mockStateLoads['OK']),
+                    'CT', getColorForValue(mockStateLoads['CT']),
+                    'IA', getColorForValue(mockStateLoads['IA']),
+                    'MS', getColorForValue(mockStateLoads['MS']),
+                    'AR', getColorForValue(mockStateLoads['AR']),
+                    'KS', getColorForValue(mockStateLoads['KS']),
+                    'UT', getColorForValue(mockStateLoads['UT']),
+                    'NV', getColorForValue(mockStateLoads['NV']),
+                    'NM', getColorForValue(mockStateLoads['NM']),
+                    'WV', getColorForValue(mockStateLoads['WV']),
+                    'NE', getColorForValue(mockStateLoads['NE']),
+                    'ID', getColorForValue(mockStateLoads['ID']),
+                    'HI', getColorForValue(mockStateLoads['HI']),
+                    'ME', getColorForValue(mockStateLoads['ME']),
+                    'NH', getColorForValue(mockStateLoads['NH']),
+                    'RI', getColorForValue(mockStateLoads['RI']),
+                    'MT', getColorForValue(mockStateLoads['MT']),
+                    'DE', getColorForValue(mockStateLoads['DE']),
+                    'SD', getColorForValue(mockStateLoads['SD']),
+                    'ND', getColorForValue(mockStateLoads['ND']),
+                    'AK', getColorForValue(mockStateLoads['AK']),
+                    'VT', getColorForValue(mockStateLoads['VT']),
+                    'WY', getColorForValue(mockStateLoads['WY']),
+                    '#ccfbf1' // default color
+                  ],
+                  'fill-opacity': 0.8
+                }
+              });
+              
+              // Add outline layer
+              map.current.addLayer({
+                id: 'states-outline',
+                type: 'line',
+                source: 'states',
+                layout: {},
+                paint: {
+                  'line-color': '#ffffff',
+                  'line-width': 1
+                }
+              });
+              
+              // Add hover effect
+              map.current.on('mouseenter', 'states-fill', () => {
+                if (map.current) {
+                  map.current.getCanvas().style.cursor = 'pointer';
+                }
+              });
+              
+              map.current.on('mouseleave', 'states-fill', () => {
+                if (map.current) {
+                  map.current.getCanvas().style.cursor = '';
+                }
+              });
+              
+              // Add click event for state details
+              map.current.on('click', 'states-fill', (e) => {
+                if (e.features && e.features[0] && e.features[0].properties) {
+                  const stateName = e.features[0].properties.STATE_NAME;
+                  const stateAbbr = e.features[0].properties.STATE_ABBR;
+                  const loadCount = mockStateLoads[stateAbbr as keyof typeof mockStateLoads] || 0;
+                  
+                  if (map.current) {
+                    new mapboxgl.Popup()
+                      .setLngLat(e.lngLat)
+                      .setHTML(`
+                        <strong>${stateName}</strong><br/>
+                        <span>Booked Loads: ${loadCount}</span>
+                      `)
+                      .addTo(map.current);
+                  }
+                }
+              });
+            }
+          } catch (error) {
+            console.error("Error adding map layers:", error);
+            setMapError("Failed to load map data. Please try refreshing the page.");
+          }
+        });
+        
+        map.current.on('error', (e) => {
+          console.error("Mapbox error:", e);
+          setMapError("An error occurred while loading the map. Please check your connection.");
+        });
+      }
+    } catch (error) {
+      console.error("Error initializing map:", error);
+      setMapError("Failed to initialize map. Please check your Mapbox configuration.");
+    }
+    
+    // Clean up on unmount
     return () => {
       if (map.current) {
         map.current.remove();
@@ -408,6 +441,18 @@ const Dashboard: React.FC = () => {
     profit: "hsl(var(--accounting))",
     pieColors: ["#14b8a6", "#0d9488", "#0f766e", "#115e59"]
   };
+  
+  // Map error fallback component
+  const MapErrorFallback = ({ error }: { error: string }) => (
+    <div className="flex flex-col items-center justify-center h-[400px] bg-muted/20 rounded-lg border border-dashed border-muted-foreground/50 p-6 text-center">
+      <AlertTriangle className="h-10 w-10 text-amber-500 mb-4" />
+      <h3 className="text-lg font-medium mb-2">Map Could Not Be Loaded</h3>
+      <p className="text-muted-foreground max-w-md mb-4">{error}</p>
+      <Button variant="outline" size="sm" onClick={() => window.location.reload()}>
+        Retry Loading Map
+      </Button>
+    </div>
+  );
   
   return (
     <div className="space-y-6">
@@ -816,12 +861,17 @@ const Dashboard: React.FC = () => {
                 </Badge>
               </div>
             </CardHeader>
-            <CardContent className="p-0 pt-4">
-              <div 
-                ref={mapContainer} 
-                className="h-[400px] w-full rounded-b-lg overflow-hidden"
-              />
-              {!mapLoaded && (
+            <CardContent className="p-0 pt-4 relative">
+              {mapError ? (
+                <MapErrorFallback error={mapError} />
+              ) : (
+                <div 
+                  ref={mapContainer} 
+                  className="h-[400px] w-full rounded-b-lg overflow-hidden"
+                />
+              )}
+              
+              {!mapLoaded && !mapError && (
                 <div className="absolute inset-0 flex items-center justify-center bg-background/80">
                   <div className="flex flex-col items-center">
                     <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>

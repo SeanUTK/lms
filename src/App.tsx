@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { AppLayout } from "@/components/layout/app-layout";
 import "@/styles/globals.css";
 
@@ -79,6 +79,37 @@ const NotFoundPage = () => (
   </div>
 );
 
+// Module wrapper components for proper nesting
+const DispatchModule = () => (
+  <>
+    <Outlet />
+  </>
+);
+
+const AccountingModule = () => (
+  <>
+    <Outlet />
+  </>
+);
+
+const FleetModule = () => (
+  <>
+    <Outlet />
+  </>
+);
+
+const SafetyModule = () => (
+  <>
+    <Outlet />
+  </>
+);
+
+const ResourcesModule = () => (
+  <>
+    <Outlet />
+  </>
+);
+
 // Loading component
 const LoadingFallback = () => (
   <div className="flex items-center justify-center min-h-screen">
@@ -98,19 +129,19 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
           {/* Main app routes */}
-          <Route element={<AppLayout />}>
+          <Route path="/" element={<AppLayout />}>
             {/* Dashboard */}
-            <Route path="/" element={<Dashboard />} />
+            <Route index element={<Dashboard />} />
             
             {/* Reports */}
-            <Route path="/reports" element={<ReportsPage />} />
-            <Route path="/reports/:reportType" element={<ReportsPage />} />
+            <Route path="reports" element={<ReportsPage />} />
+            <Route path="reports/:reportType" element={<ReportsPage />} />
             
             {/* Notifications */}
-            <Route path="/notifications" element={<NotificationsPage />} />
+            <Route path="notifications" element={<NotificationsPage />} />
             
             {/* Dispatching Module */}
-            <Route path="/dispatch">
+            <Route path="dispatch" element={<DispatchModule />}>
               <Route index element={<Navigate to="/dispatch/board" replace />} />
               <Route path="board" element={<DispatchBoardPage />} />
               <Route path="tenders" element={<EDITendersPage />} />
@@ -119,7 +150,7 @@ function App() {
             </Route>
             
             {/* Accounting Module */}
-            <Route path="/accounting">
+            <Route path="accounting" element={<AccountingModule />}>
               <Route index element={<Navigate to="/accounting/receivables" replace />} />
               <Route path="receivables" element={<ReceivablesPage />} />
               <Route path="receivables/:invoiceId" element={<PlaceholderPage title="Invoice Details" />} />
@@ -131,7 +162,7 @@ function App() {
             </Route>
             
             {/* Fleet Module */}
-            <Route path="/fleet">
+            <Route path="fleet" element={<FleetModule />}>
               <Route index element={<Navigate to="/fleet/overview" replace />} />
               <Route path="compliance" element={<FleetCompliancePage />} />
               <Route path="overview" element={<FleetOverviewPage />} />
@@ -140,7 +171,7 @@ function App() {
             </Route>
             
             {/* Safety Module */}
-            <Route path="/safety">
+            <Route path="safety" element={<SafetyModule />}>
               <Route index element={<Navigate to="/safety/compliance" replace />} />
               <Route path="compliance" element={<SafetyCompliancePage />} />
               <Route path="inspections" element={<DOTInspectionsPage />} />
@@ -148,7 +179,7 @@ function App() {
             </Route>
             
             {/* Account Resources Module */}
-            <Route path="/resources">
+            <Route path="resources" element={<ResourcesModule />}>
               <Route index element={<Navigate to="/resources/companies" replace />} />
               <Route path="companies" element={<CompaniesPage />} />
               <Route path="factors" element={<FactorsPage />} />
@@ -164,9 +195,9 @@ function App() {
             </Route>
             
             {/* Settings and Profile */}
-            <Route path="/settings" element={<SettingsPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/help" element={<HelpSupportPage />} />
+            <Route path="settings" element={<SettingsPage />} />
+            <Route path="profile" element={<ProfilePage />} />
+            <Route path="help" element={<HelpSupportPage />} />
           </Route>
           
           {/* 404 - Not Found */}
