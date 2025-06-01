@@ -1,0 +1,299 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+ 
+@layer base {
+  :root {
+    /* Base colors */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    
+    /* Card colors */
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    
+    /* Popover colors */
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    
+    /* Primary colors - Emerald green for a professional look */
+    --primary: 142 72% 29%;
+    --primary-foreground: 210 40% 98%;
+    
+    /* Secondary colors - Subtle blue */
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    
+    /* Muted colors */
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    
+    /* Accent colors */
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    
+    /* Destructive colors */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    /* Border and input colors */
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    
+    /* Radius */
+    --radius: 0.5rem;
+
+    /* TMS Module Colors */
+    /* Dispatch - Vibrant blue */
+    --dispatch: 210 100% 50%;
+    --dispatch-foreground: 0 0% 100%;
+    --dispatch-light: 210 100% 90%;
+    
+    /* Accounting - Sophisticated purple */
+    --accounting: 265 50% 50%;
+    --accounting-foreground: 0 0% 100%;
+    --accounting-light: 265 50% 90%;
+    
+    /* Fleet - Deep teal */
+    --fleet: 180 60% 35%;
+    --fleet-foreground: 0 0% 100%;
+    --fleet-light: 180 60% 90%;
+    
+    /* Safety - Warm amber */
+    --safety: 30 100% 50%;
+    --safety-foreground: 0 0% 100%;
+    --safety-light: 30 100% 90%;
+    
+    /* Resources - Rich green */
+    --resources: 150 50% 40%;
+    --resources-foreground: 0 0% 100%;
+    --resources-light: 150 50% 90%;
+    
+    /* Map Colors */
+    --map: 200 70% 50%;
+    --map-highlight: 200 100% 60%;
+    --map-route: 142 72% 29%;
+    --map-marker: 0 84.2% 60.2%;
+  }
+ 
+  .dark {
+    /* Base colors */
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    
+    /* Card colors */
+    --card: 222.2 84% 6.9%;
+    --card-foreground: 210 40% 98%;
+    
+    /* Popover colors */
+    --popover: 222.2 84% 6.9%;
+    --popover-foreground: 210 40% 98%;
+    
+    /* Primary colors - Emerald green for a professional look */
+    --primary: 142 72% 29%;
+    --primary-foreground: 210 40% 98%;
+    
+    /* Secondary colors */
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    
+    /* Muted colors */
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    
+    /* Accent colors */
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    
+    /* Destructive colors */
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    /* Border and input colors */
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+
+    /* TMS Module Colors - Darker versions for dark mode */
+    /* Dispatch - Vibrant blue */
+    --dispatch: 210 100% 40%;
+    --dispatch-foreground: 0 0% 100%;
+    --dispatch-light: 210 100% 20%;
+    
+    /* Accounting - Sophisticated purple */
+    --accounting: 265 50% 40%;
+    --accounting-foreground: 0 0% 100%;
+    --accounting-light: 265 50% 20%;
+    
+    /* Fleet - Deep teal */
+    --fleet: 180 60% 30%;
+    --fleet-foreground: 0 0% 100%;
+    --fleet-light: 180 60% 15%;
+    
+    /* Safety - Warm amber */
+    --safety: 30 100% 40%;
+    --safety-foreground: 0 0% 100%;
+    --safety-light: 30 100% 20%;
+    
+    /* Resources - Rich green */
+    --resources: 150 50% 30%;
+    --resources-foreground: 0 0% 100%;
+    --resources-light: 150 50% 15%;
+    
+    /* Map Colors - Dark mode */
+    --map: 200 70% 30%;
+    --map-highlight: 200 100% 40%;
+    --map-route: 142 72% 29%;
+    --map-marker: 0 84.2% 60.2%;
+  }
+}
+
+/* Global styles */
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--secondary));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.7);
+}
+
+/* Mapbox custom styles */
+.mapboxgl-map {
+  font-family: inherit;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.mapboxgl-ctrl-logo {
+  opacity: 0.7;
+}
+
+.mapboxgl-popup-content {
+  padding: 12px;
+  border-radius: var(--radius);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid hsl(var(--border));
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+.mapboxgl-popup-close-button {
+  color: hsl(var(--foreground));
+  padding: 4px;
+  font-size: 16px;
+}
+
+/* Custom map markers */
+.map-marker {
+  background-color: hsl(var(--map-marker));
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+}
+
+.map-marker.active {
+  background-color: hsl(var(--primary));
+  transform: scale(1.2);
+}
+
+/* Animation utilities */
+@layer utilities {
+  .animate-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  .animate-out {
+    animation: fadeOut 0.3s ease-in;
+  }
+  
+  .slide-in-right {
+    animation: slideInRight 0.3s ease-out;
+  }
+  
+  .slide-out-right {
+    animation: slideOutRight 0.3s ease-in;
+  }
+}
+
+/* Transition utilities */
+@layer utilities {
+  .transition-all {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
+  
+  .transition-colors {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
+}
+
+/* Module specific styling */
+.module-dispatch {
+  --module-color: var(--dispatch);
+  --module-color-light: var(--dispatch-light);
+}
+
+.module-accounting {
+  --module-color: var(--accounting);
+  --module-color-light: var(--accounting-light);
+}
+
+.module-fleet {
+  --module-color: var(--fleet);
+  --module-color-light: var(--fleet-light);
+}
+
+.module-safety {
+  --module-color: var(--safety);
+  --module-color-light: var(--safety-light);
+}
+
+.module-resources {
+  --module-color: var(--resources);
+  --module-color-light: var(--resources-light);
+}
+
+/* Module indicator */
+.module-indicator {
+  height: 4px;
+  background-color: hsl(var(--module-color));
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
